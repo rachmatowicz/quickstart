@@ -28,11 +28,13 @@ public class CalculatorBean implements RemoteCalculator {
 
     @Override
     public int add(int a, int b) {
+        System.out.printf("CalculatorBean: adding: %s + %s\n", a, b);
         return a + b;
     }
 
     @Override
     public int subtract(int a, int b) {
+        System.out.printf("CalculatorBean: subtracting: %s - %s\n", a, b);
         return a - b;
     }
 }

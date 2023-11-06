@@ -41,6 +41,12 @@
         on all the artifacts it manages.
         -->
         <dependency>
+            <groupId>org.jboss.logmanager</groupId>
+            <artifactId>jboss-logmanager</artifactId>
+            <version>3.0.0.Final</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-ejb-client-bom</artifactId>
             <type>pom</type>
@@ -70,9 +76,13 @@
                     <workingDirectory>${project.build.directory}/exec-working-directory</workingDirectory>
                     <arguments>
                         <argument>-Dhttp=${http}</argument>
+                        <!-- argument>-Djavax.net.debug=all</argument-->
+                        <argument>-Djava.util.logging.manager=org.jboss.logmanager.LogManager</argument>
+                        <argument>-Dlogging.configuration=logging.properties</argument>
                         <argument>-classpath</argument>
                         <classpath></classpath>
-                        <argument>org.jboss.as.quickstarts.ejb.remote.client.RemoteEJBClient</argument>
+                        <!--argument>org.jboss.as.quickstarts.ejb.remote.client.RemoteEJBClient</argument-->
+                        <argument>org.ssltest.SslTest</argument>
                     </arguments>
                     <!--<detail>true</detail>-->
                 </configuration>
