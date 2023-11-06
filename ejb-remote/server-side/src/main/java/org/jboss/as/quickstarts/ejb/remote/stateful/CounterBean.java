@@ -30,16 +30,19 @@ public class CounterBean implements RemoteCounter {
 
     @Override
     public void increment() {
+        System.out.printf("CounterBean: incrementing count\n");
         this.count++;
     }
 
     @Override
     public void decrement() {
+        System.out.printf("CounterBean: decrementing count\n");
         this.count--;
     }
 
     @Override
     public int getCount() {
+        System.out.printf("CounterBean: getting count\n");
         return this.count;
     }
 }

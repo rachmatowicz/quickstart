@@ -31,20 +31,42 @@
 
     <properties>
         <http>false</http>
+        <logging.properties.file>/home/nrla/products/wildfly-quickstarts-git-repo/ejb-remote/client/target/classes/logging.properties</logging.properties.file>
     </properties>
 
     <dependencies>
-        <!-- The EJB Client BOM provides application server-compatible dependency management,
-        used for building, testing or debugging EJB client applications. Import the BOM to the
-        dependency management section of the app's pom.xml file and then set dependencies on specific artifacts.
-        Alternatively, as shown in the following example, set a single dependency on the BOM for the app to depend
-        on all the artifacts it manages.
+
+        <!--
+        <dependency>
+            <groupId>org.wildfly.wildfly-http-client</groupId>
+            <artifactId>wildfly-http-client-common</artifactId>
+            <version>1.1.16.Final-redhat-00002</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.wildfly-http-client</groupId>
+            <artifactId>wildfly-http-ejb-client</artifactId>
+            <version>1.1.16.Final-redhat-00002</version>
+        </dependency>
         -->
+
+        <!-- The EJB Client BOM provides application server-compatible dependency management,
+         used for building, testing or debugging EJB client applications. Import the BOM to the
+         dependency management section of the app's pom.xml file and then set dependencies on specific artifacts.
+         Alternatively, as shown in the following example, set a single dependency on the BOM for the app to depend
+         on all the artifacts it manages.
+         -->
         <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-ejb-client-bom</artifactId>
             <type>pom</type>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.logmanager</groupId>
+            <artifactId>jboss-logmanager</artifactId>
+            <version>3.0.0.Final</version>
         </dependency>
 
         <!-- We depend on the EJB remote business interfaces of this application -->
@@ -58,8 +80,13 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
         <plugins>
-
             <!-- Add the maven exec plug-in to allow us to run a java program
                 via maven -->
             <plugin>
@@ -70,6 +97,8 @@
                     <workingDirectory>${project.build.directory}/exec-working-directory</workingDirectory>
                     <arguments>
                         <argument>-Dhttp=${http}</argument>
+                        <argument>-Djava.util.logging.manager=org.jboss.logmanager.LogManager</argument>
+                        <argument>-Dlogging.configuration=file://${logging.properties.file}</argument>
                         <argument>-classpath</argument>
                         <classpath></classpath>
                         <argument>org.jboss.as.quickstarts.ejb.remote.client.RemoteEJBClient</argument>
