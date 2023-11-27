@@ -30,7 +30,7 @@
     <description>This project demonstrates how to access an EJB from a remote client; this is the client POM file</description>
 
     <properties>
-        <http>false</http>
+        <http>true</http>
         <logging.properties.file>/home/nrla/products/wildfly-quickstarts-git-repo/ejb-remote/client/target/classes/logging.properties</logging.properties.file>
     </properties>
 
@@ -99,6 +99,7 @@
                         <argument>-Dhttp=${http}</argument>
                         <argument>-Djava.util.logging.manager=org.jboss.logmanager.LogManager</argument>
                         <argument>-Dlogging.configuration=file://${logging.properties.file}</argument>
+                        <!--argument>-Djavax.net.debug=all</argument-->
                         <argument>-classpath</argument>
                         <classpath></classpath>
                         <argument>org.jboss.as.quickstarts.ejb.remote.client.RemoteEJBClient</argument>

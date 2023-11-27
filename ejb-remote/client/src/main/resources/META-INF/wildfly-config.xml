@@ -19,51 +19,56 @@
   -->
 
 <configuration>
-    <authentication-client xmlns="urn:elytron:1.0">
+    <authentication-client xmlns="urn:elytron:client:1.6">
         <!-- authentication configuration -->
         <authentication-rules>
             <rule use-configuration="default"/>
         </authentication-rules>
         <authentication-configurations>
             <configuration name="default">
-                <sasl-mechanism-selector selector="#ALL"/>
-                <set-mechanism-properties>
-                    <property key="wildfly.sasl.local-user.quiet-auth" value="true"/>
-                </set-mechanism-properties>
+                <sasl-mechanism-selector selector="DIGEST-MD5"/>
+                <!-- Used for EJB over HTTP, remoting invocations will use transparent auth-->
+                <set-user-name name="sslUser"/>
+                <credentials>
+                    <clear-password password="sslUserPass123!"/>
+                </credentials>
                 <providers>
                     <use-service-loader/>
                 </providers>
-                <!-- Used for EJB over HTTP, remoting invocations will use transparent auth-->
-                <set-user-name name="quickstartUser"/>
-                <credentials>
-                    <clear-password password="quickstartPwd1!"/>
-                </credentials>
             </configuration>
         </authentication-configurations>
         <!-- SSL configuration -->
         <key-stores>
-            <key-store name="client-keys" type="JKS">
-                <resource name="client.keystore"/>
-                <key-store-clear-password password="abcdef"/>
+            <key-store name="client-keystore" type="PKCS12">
+                <file name="/home/nrla/products/wildfly-quickstarts-git-repo/ejb-remote/client/src/main/resources/client.keystore"/>
+                <key-store-clear-password password="tlsClientStorepass"/>
             </key-store>
-            <key-store name="client-trust" type="JKS">
-                <resource name="client.truststore"/>
+            <key-store name="client-truststore" type="PKCS12">
+                <file name="/home/nrla/products/wildfly-quickstarts-git-repo/ejb-remote/client/src/main/resources/client.truststore"/>
+                <key-store-clear-password password="tlsClientStorepass"/>
             </key-store>
         </key-stores>
         <ssl-contexts>
-            <ssl-context name="client-ssl">
-                <trust-store key-store-name="client-trust"/>
-                <key-store-ssl-certificate key-store-name="client-keys" alias="clientalias">
-                    <key-store-clear-password password="abcdef"/>
+            <ssl-context name="client-ssl-context">
+                <trust-store key-store-name="client-truststore"/>
+                <key-store-ssl-certificate key-store-name="client-keystore" alias="clientalias">
+                    <key-store-clear-password password="tlsClientStorepass"/>
                 </key-store-ssl-certificate>
+                <protocol names="TLSv1.3 TLSv1.2"/>
             </ssl-context>
         </ssl-contexts>
         <ssl-context-rules>
-            <rule use-ssl-context="client-ssl">
-                <match-protocol name="https"/>
+            <rule use-ssl-context="client-ssl-context">
+                <match-protocol name="remote+https"/>
+                <!--match-protocol name="https"/-->
             </rule>
         </ssl-context-rules>
     </authentication-client>
+    <jboss-ejb-client xmlns="urn:jboss:wildfly-client-ejb:3.0">
+        <connections>
+            <connection uri="remote+https://localhost:8443"/>
+        </connections>
+    </jboss-ejb-client>
     <http-client xmlns="urn:wildfly-http-client:1.0">
         <defaults>
             <eagerly-acquire-session value="true"/>
