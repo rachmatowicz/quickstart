@@ -99,7 +99,7 @@
                         <argument>-Dhttp=${http}</argument>
                         <argument>-Djava.util.logging.manager=org.jboss.logmanager.LogManager</argument>
                         <argument>-Dlogging.configuration=file://${logging.properties.file}</argument>
-                        <!--argument>-Djavax.net.debug=all</argument-->
+                        <argument>-Djavax.net.debug=all</argument>
                         <argument>-classpath</argument>
                         <classpath></classpath>
                         <argument>org.jboss.as.quickstarts.ejb.remote.client.RemoteEJBClient</argument>
